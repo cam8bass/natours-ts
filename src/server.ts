@@ -10,7 +10,6 @@ const { DATABASE, DATABASE_PASSWORD, PORT } = process.env;
 const databaseUri = DATABASE?.replace('<password>', DATABASE_PASSWORD!);
 
 async function startServer() {
-
   try {
     await connectToDB(databaseUri!);
     const port = PORT || 3000;
@@ -23,8 +22,18 @@ async function startServer() {
     } else if (process.env.NODE_ENV === 'production') {
       console.error('💥 Server startup error:', error.name, error.message);
     }
-    server.close(() => {
-      process.exit(1);
+
+    process.on('unhandledRejection', (err: any) => {
+      console.log('unhandled rejection 💥 Shutting down...');
+      console.log(err.name, err.message);
+      server.close(() => process.exit(1));
+    });
+
+    process.on('SIGTERM', () => {
+      console.log('SIGTERM RECEIVED. Shutting down gracefully');
+      server.close(() => {
+        console.log('💥 Process terminated!');
+      });
     });
   }
 }

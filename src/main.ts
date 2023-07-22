@@ -16,7 +16,7 @@ import cookieParser from 'cookie-parser';
 import compression from 'compression';
 
 const app: Application = express();
-
+app.enable('trust proxy');
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -79,7 +79,7 @@ app.use(
   })
 );
 
-app.use(compression())
+app.use(compression());
 // 2) ROUTES
 app.use('/', viewRouter);
 app.use('/api/v1/tours', toursRouter);
