@@ -14,6 +14,7 @@ import usersRouter from './routes/user.routes';
 import reviewsRouter from './routes/review.routes';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
+import cors from "cors"
 
 const app: Application = express();
 app.enable('trust proxy');
@@ -21,7 +22,11 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // 1) GLOBAL MIDDLEWARE
+// Implement CORS 
+app.use(cors())
+app.options("*",cors())
 // Set security HTTP headers
+
 
 // app.use(
 //   helmet({
